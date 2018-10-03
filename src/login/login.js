@@ -6,6 +6,8 @@ class Login extends React.Component {
     this.state = {
       username: "",
       password: "",
+      isAuthenticated: '',
+      route: 'login',
       displayToaster: {
         display: "none"
       }
@@ -18,20 +20,22 @@ class Login extends React.Component {
     });
   }
 
-  requestLogin() {
-    const { username, password } = this.state;
-    fetch("http://localhost:5000/authenticate", {
+  requestLogin = () => {
+    fetch("http://localhost:4000/users/authenticate", {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        username,
-        password
+        username: this.state.username,
+        password: this.state.password
       })
     })
       .then(response => response.json())
       .then(token => {
         localStorage.setItem('auth-token', token);
-      });
+      })
+      .catch(err => {
+        this.setState({displayToaster:{display: 'block'}})
+      })
   }
 
   render() {
