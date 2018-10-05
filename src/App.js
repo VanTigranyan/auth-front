@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 import Profile from './profile/profile';
 import Login from './login/login';
 
@@ -8,18 +9,32 @@ class App extends Component {
     super()
     this.state = {
       route: 'login',
-      user: ''
+      user: '',
+      isLoggedIn: false,
     }
   }
 
-changeRoute = () => {
+getUser = (u) => {
   this.setState({
-    route:'home'
+    user: {...u}
   })
 }
 
   render() {
-      return this.state.route === 'login'? <Login onRouteChange={this.changeRoute} /> : <Profile user={this.state.user}/>
+    return(
+      <Router>
+        <div>
+          <Switch>
+            <Route exact path="/"
+              render={(props) => <Login {...props}  user={this.getUser}/>}
+              />
+            <Route path="/profile"
+              render={(props) => <Profile {...props} user={this.state.user}/>}
+              />
+          </Switch>
+        </div>
+      </Router>
+    )
   }
 }
 

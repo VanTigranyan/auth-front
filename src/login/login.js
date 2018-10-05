@@ -1,4 +1,5 @@
 import React from "react";
+import { withRouter } from 'react-router-dom';
 
 class Login extends React.Component {
   constructor() {
@@ -6,12 +7,16 @@ class Login extends React.Component {
     this.state = {
       username: "",
       password: "",
-      isAuthenticated: '',
-      route: 'login',
       displayToaster: {
         display: "none"
       }
     };
+  }
+
+  componentDidMount(){
+    if(localStorage.getItem('auth-token')) {
+      this.props.history.push('/profile')
+    }
   }
 
   onFieldChange(event) {
@@ -30,8 +35,10 @@ class Login extends React.Component {
       })
     })
       .then(response => response.json())
-      .then(token => {
-        localStorage.setItem('auth-token', token);
+      .then(user => {
+        localStorage.setItem('auth-token', user.token);
+        this.props.user(user);
+        this.props.history.push('/profile');
       })
       .catch(err => {
         this.setState({displayToaster:{display: 'block'}})
@@ -87,4 +94,4 @@ class Login extends React.Component {
     );
   }
 }
-export default Login;
+export default withRouter(Login);
