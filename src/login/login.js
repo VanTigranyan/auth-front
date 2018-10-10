@@ -1,5 +1,9 @@
 import React from "react";
-import { withRouter } from 'react-router-dom';
+import axios from "axios";
+import { withRouter, Link } from "react-router-dom";
+import { withLastLocation } from "react-router-last-location";
+
+axios.defaults.headers.common['Authorization'] = localStorage.getItem('auth-token');
 
 class Login extends React.Component {
   constructor() {
@@ -13,12 +17,6 @@ class Login extends React.Component {
     };
   }
 
-  componentDidMount(){
-    if(localStorage.getItem('auth-token')) {
-      this.props.history.push('/profile')
-    }
-  }
-
   onFieldChange(event) {
     this.setState({
       [event.target.name]: event.target.value
@@ -26,23 +24,22 @@ class Login extends React.Component {
   }
 
   requestLogin = () => {
-    fetch("http://localhost:4000/users/authenticate", {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
+    axios({
+      method: 'post',
+      url: "/authenticate",
+      data: {
         username: this.state.username,
         password: this.state.password
-      })
+      }
     })
-      .then(response => response.json())
-      .then(user => {
-        localStorage.setItem('auth-token', user.token);
-        this.props.user(user);
-        this.props.history.push('/profile');
-      })
-      .catch(err => {
-        this.setState({displayToaster:{display: 'block'}})
-      })
+    .then(user => {
+      localStorage.setItem("auth-token", user.data.token);
+      this.props.user(user.data);
+      this.props.history.push("/profile");
+    })
+    .catch(err => {
+      this.setState({ displayToaster: { display: "block" } });
+    });
   }
 
   render() {
@@ -81,10 +78,19 @@ class Login extends React.Component {
                       onChange={event => this.onFieldChange(event)}
                     />
                   </div>
-                  <button className="ui primary labeled icon button" onClick={this.requestLogin}>
+                  <button
+                    className="ui primary labeled icon button"
+                    onClick={this.requestLogin}
+                  >
                     <i className="unlock alternate icon" />
                     Login
                   </button>
+                  <div>
+                    <h5>
+                      Still dont have an account?{" "}
+                      <Link to="/register">REGISTER</Link>
+                    </h5>
+                  </div>
                 </div>
               </div>
             </div>
@@ -94,4 +100,4 @@ class Login extends React.Component {
     );
   }
 }
-export default withRouter(Login);
+export default withRouter(withLastLocation(Login));
