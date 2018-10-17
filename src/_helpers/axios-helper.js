@@ -1,10 +1,12 @@
 import axios from 'axios';
 
+import { BASE_URL } from './api';
+
 const token = 'Bearer ' + localStorage.getItem('auth-token');
-axios.defaults.baseURL = 'http://localhost:80/users';
+axios.defaults.baseURL = BASE_URL;
 
 const axiosInst = axios.create({
-  baseURL: 'http://localhost:80/users',
+  baseURL: BASE_URL,
   headers: {
     'Authorization': token
   }

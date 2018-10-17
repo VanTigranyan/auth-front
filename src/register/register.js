@@ -2,6 +2,8 @@ import React from "react";
 import axiosInst from '../_helpers/axios-helper'
 import { withRouter, Link } from 'react-router-dom';
 
+import { USER_REGISTER } from '../_helpers/api';
+
 class Register extends React.Component {
   constructor() {
     super();
@@ -25,7 +27,7 @@ class Register extends React.Component {
   requestRegister = () => {
     axiosInst({
       method: "post",
-      url: '/register',
+      url: USER_REGISTER,
       data: {
         username: this.state.username,
         password: this.state.password,

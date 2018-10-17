@@ -1,9 +1,13 @@
 import React from "react";
 import axios from "axios";
+import './login.css';
 import { withRouter, Link } from "react-router-dom";
-import { withLastLocation } from "react-router-last-location";
 
-axios.defaults.headers.common['Authorization'] = localStorage.getItem('auth-token');
+import { USER_AUTHENTICATE } from "../_helpers/api";
+
+axios.defaults.headers.common["Authorization"] = localStorage.getItem(
+  "auth-token"
+);
 
 class Login extends React.Component {
   constructor() {
@@ -23,75 +27,56 @@ class Login extends React.Component {
     });
   }
 
-  requestLogin = () => {
+  requestLogin = (e) => {
+    e.preventDefault();
     axios({
-      method: 'post',
-      url: "/authenticate",
+      method: "post",
+      url: USER_AUTHENTICATE,
       data: {
         username: this.state.username,
         password: this.state.password
       }
     })
-    .then(user => {
-      localStorage.setItem("auth-token", user.data.token);
-      this.props.user(user.data);
-      this.props.history.push("/profile");
-    })
-    .catch(err => {
-      this.setState({ displayToaster: { display: "block" } });
-    });
-  }
+      .then(user => {
+        localStorage.setItem("auth-token", user.data.token);
+        this.props.user(user.data);
+        this.props.history.push("/profile");
+      })
+      .catch(err => {
+        this.setState({ displayToaster: { display: "block" } });
+      });
+  };
 
   render() {
     return (
-      <div className="page-login">
-        <div className="ui centered grid container">
-          <div className="nine wide column">
-            <div
-              className="ui icon warning message"
-              style={this.state.displayToaster}
-            >
-              <i className="lock icon" />
-              <div className="content">
-                <div className="header">Login failed!</div>
-                <p>You might have misspelled your username or password!</p>
-              </div>
-            </div>
-            <div className="ui fluid card">
-              <div className="content">
-                <div className="ui form">
-                  <div className="field">
-                    <label>User</label>
-                    <input
-                      type="text"
-                      name="username"
-                      placeholder="User"
+      <div className="container">
+        <div className="row">
+          <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
+            <div className="card card-signin my-5">
+              <div className="card-body">
+                <h5 className="card-title text-center">Sign In</h5>
+                <form className="form-signin" onSubmit={event => this.requestLogin(event)}>
+                  <div className="form-label-group">
+                    <input type="text" id="username"
+                      className="form-control"
+                      placeholder="Email address"
+                      required autofocus name='username'
                       onChange={event => this.onFieldChange(event)}
                     />
+                    <label htmlFor="username">Email address</label>
                   </div>
-                  <div className="field">
-                    <label>Password</label>
-                    <input
-                      type="password"
-                      name="password"
+
+                  <div className="form-label-group">
+                    <input type="password" id="inputPassword"
+                      className="form-control"
                       placeholder="Password"
+                      required name='password'
                       onChange={event => this.onFieldChange(event)}
                     />
+                    <label htmlFor="inputPassword">Password</label>
                   </div>
-                  <button
-                    className="ui primary labeled icon button"
-                    onClick={this.requestLogin}
-                  >
-                    <i className="unlock alternate icon" />
-                    Login
-                  </button>
-                  <div>
-                    <h5>
-                      Still dont have an account?{" "}
-                      <Link to="/register">REGISTER</Link>
-                    </h5>
-                  </div>
-                </div>
+                  <button className="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign in</button>
+                </form>
               </div>
             </div>
           </div>
@@ -100,4 +85,4 @@ class Login extends React.Component {
     );
   }
 }
-export default withRouter(withLastLocation(Login));
+export default withRouter(Login);

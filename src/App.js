@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import Settings from './settings/settings';
+import './App.css';
 import {
   BrowserRouter as Router,
   Route,
@@ -9,6 +11,7 @@ import { LastLocationProvider } from "react-router-last-location";
 import Profile from "./profile/profile";
 import Register from "./register/register";
 import Login from "./login/login";
+import Posts from "./posts/posts.js";
 
 class App extends Component {
   constructor() {
@@ -44,6 +47,14 @@ class App extends Component {
               <Route
                 path="/register"
                 render={props => <Register {...props} />}
+              />
+              <Route
+                path='/settings/:id'
+                render={( props ) => <Settings  user={ this.state.user } {...props} /> }
+              />
+              <Route
+                path='/posts'
+                render={( props ) => <Posts  user={ this.state.user } {...props} /> }
               />
             </Switch>
           </div>
