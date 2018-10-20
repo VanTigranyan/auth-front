@@ -1,8 +1,14 @@
 import React from "react";
-import NavBar from '../navbar/navbar';
-import Posts from '../posts/posts';
-import Settings from '../settings/settings';
-import { withRouter, Link, BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import NavBar from "../navbar/navbar";
+import Posts from "../posts/posts";
+import Settings from "../settings/settings";
+import {
+  withRouter,
+  Link,
+  BrowserRouter as Router,
+  Route,
+  Switch
+} from "react-router-dom";
 import { connect } from "react-redux";
 import { reqUserAction } from "../actions/actions";
 
@@ -21,8 +27,6 @@ const mapDispatchtoProps = dispatch => {
 };
 
 class Profile extends React.Component {
-
-
   componentWillMount() {
     this.props.onRequestUser();
   }
@@ -52,36 +56,39 @@ class Profile extends React.Component {
           <Router>
             <div>
               <NavBar user={this.props.user} logOut={this.logOut} />
-              <Route path='/posts' render={( props ) => <Posts  user={ this.props.user } {...props}/> }/>
               <Route
-                path='/settings/:id'
-                render={( props ) => <Settings  user={ this.props.user } reqUser={this.props.onRequestUser} {...props} /> }
+                path="/posts"
+                render={props => <Posts user={this.props.user} {...props} />}
               />
-              <Route path='/profile' render={(props) => {
-                return (
-                  <div className="container">
-                    <div className="row">
-                      <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
-                        <div className="card card-signin my-5">
-                          <div className="card-body">
-                            <h5>Here is Your Info</h5>
-                            <ul>
-                              <li>Your Name: {user.firstName}</li>
-                              <li>Your Last Name: {user.lastName}</li>
-                              <li>Your Username: {user.username}</li>
-                            </ul>
+              <Route
+                path="/settings/:id"
+                render={props => <Settings user={this.props.user} {...props} />}
+              />
+              <Route
+                path="/profile"
+                render={props => {
+                  return (
+                    <div className="container">
+                      <div className="row">
+                        <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
+                          <div className="card card-signin my-5">
+                            <div className="card-body">
+                              <h5>Here is Your Info</h5>
+                              <ul>
+                                <li>Your Name: {user.firstName}</li>
+                                <li>Your Last Name: {user.lastName}</li>
+                                <li>Your Username: {user.username}</li>
+                              </ul>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                )
-              }}
+                  );
+                }}
               />
-
             </div>
           </Router>
-
         </React.Fragment>
       );
     } else if (!isPending && error) {

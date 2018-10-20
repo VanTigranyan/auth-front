@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Settings from './settings/settings';
 import './App.css';
 import {
   BrowserRouter as Router,
@@ -10,7 +9,6 @@ import {
 import Profile from "./profile/profile";
 import Register from "./register/register";
 import Login from "./login/login";
-import Posts from "./posts/posts.js";
 
 class App extends Component {
   constructor() {

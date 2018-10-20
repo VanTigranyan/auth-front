@@ -27,7 +27,6 @@ import {
    }
  }
 
-
  const rootReducer = combineReducers({
    requestUserReducer
  })

@@ -10,8 +10,6 @@ axios.defaults.headers.common["Authorization"] = localStorage.getItem(
 );
 
 class Login extends React.Component {
-
-
   constructor() {
     super();
     this.state = {
