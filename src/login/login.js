@@ -10,6 +10,8 @@ axios.defaults.headers.common["Authorization"] = localStorage.getItem(
 );
 
 class Login extends React.Component {
+
+
   constructor() {
     super();
     this.state = {
@@ -59,11 +61,11 @@ class Login extends React.Component {
                   <div className="form-label-group">
                     <input type="text" id="username"
                       className="form-control"
-                      placeholder="Email address"
-                      required autofocus name='username'
+                      placeholder="Username"
+                      required autoFocus name='username'
                       onChange={event => this.onFieldChange(event)}
                     />
-                    <label htmlFor="username">Email address</label>
+                    <label htmlFor="username">Username</label>
                   </div>
 
                   <div className="form-label-group">
@@ -75,6 +77,7 @@ class Login extends React.Component {
                     />
                     <label htmlFor="inputPassword">Password</label>
                   </div>
+                  <h6>Don't have an account? <Link to='/register'>Register</Link></h6>
                   <button className="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign in</button>
                 </form>
               </div>

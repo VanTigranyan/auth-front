@@ -1,13 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
-export default class NavBar extends React.Component {
+class NavBar extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
+        <nav className="navbar navbar-expand-lg navbar-light bg-light mb-4">
           <a className="navbar-brand" href="#">
-            Navbar
+            Auth App
           </a>
           <button
             className="navbar-toggler"
@@ -24,7 +24,10 @@ export default class NavBar extends React.Component {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav ml-auto">
               <li className="nav-item">
-                <Link className="nav-link" to={'/posts'}>
+                <h4 onClick={this.props.history.goBack()}> &larr; Go Back</h4>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to={"/posts"}>
                   Posts
                 </Link>
               </li>
@@ -41,13 +44,19 @@ export default class NavBar extends React.Component {
                   User
                 </a>
                 <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <Link
-                    to={"/settings/" + this.props.user.id}
-                    className="dropdown-item"
-                  >
-                    Edit Profile
-                  </Link>
-                  <div className="dropdown-divider" />
+                  {this.props.location.pathname !==
+                    "/settings" + this.props.user.id ? (
+                      <React.Fragment>
+                        <Link
+                          to={"/settings/" + this.props.user.id}
+                          className="dropdown-item"
+                        >
+                          Edit Profile
+                        </Link>
+                        <div className="dropdown-divider" />
+                      </React.Fragment>
+                    ) : null}
+
                   <a
                     className="dropdown-item"
                     href="#"
@@ -67,3 +76,4 @@ export default class NavBar extends React.Component {
     );
   }
 }
+export default withRouter(NavBar);

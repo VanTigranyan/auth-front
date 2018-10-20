@@ -6,7 +6,7 @@ export const POST_CREATE = '/posts/create';
 export const POST_OF_THE_USER = '/posts';
 export const POST_ALL_POSTS = '/posts/all';
 export const POST_UPDATE = '/posts';
-export const POST_DELET = '/posts';
+export const POST_DELETE = '/posts';
 
 
 /*Users API constants*/

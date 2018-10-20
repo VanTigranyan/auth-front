@@ -1,179 +1,135 @@
 import React from "react";
-import { Tab } from "semantic-ui-react";
 import axiosInst from "../_helpers/axios-helper";
+
+import {USER_UPDATE} from '../_helpers/api';
 
 
 export default class Settings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      displayToaster: {
-        display: "none"
-      }
+      changed: false,
+      changedFields: [],
     };
   }
 
+  componentDidMount() {
+    document.getElementById('username').value = this.props.user.username;
+    document.getElementById('firstName').value = this.props.user.firstName;
+    document.getElementById('lastName').value = this.props.user.lastName;
+
+  }
+
+
   onFieldChange(event) {
+    event.target.value = event.target.value
+
     this.setState({
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
+      changed: true
     });
+
+    if(event.target.name === 'password' && this.state.changedFields.indexOf('password')===-1) {
+
+      this.setState({
+        changedFields: [...this.state.changedFields, 'password']
+      })
+
+    } else {
+
+      if(this.state.changedFields.indexOf(event.target.name)===-1) {
+
+        this.setState({
+          changedFields: [...this.state.changedFields, event.target.name]
+        })
+
+      }
+    }
   }
 
   requestUpdate = (event) => {
-    const { displayToaster, ...info } = this.state;
-    const { password, firstName, lastName, username } = info;
-
+    event.preventDefault();
     const { match: { params } } = this.props;
     const id = params.id;
 
+    let reqObj = {};
+
+    this.state.changedFields.map(str => {
+      reqObj[str] = this.state[str]
+    })
+
+    console.log(reqObj)
+
     axiosInst({
       method: 'put',
-      url: '/' + id,
-      data :{
-        ...info
-      }
+      url: USER_UPDATE +'/'+ id,
+      data : reqObj
     })
     .then(response => {
       console.log(response.data);
-      if(this.state.password) {
-        this.props.history.push('/login')
-      }
+      this.props.reqUser();
       this.props.history.push('/profile')
     })
     .catch(error => console.log(error))
   }
 
   render() {
-
-    const panes = [
-      {
-        menuItem: "Change Username",
-        render: () => {
-          return (
-          <Tab.Pane>
-            <h3>Change Username</h3>
-            <div className="ui fluid card">
-              <div className="content">
-                <div className="ui form">
-                  <div className="field">
-                    <label>User</label>
-                    <input
-                      type="text"
-                      name="username"
-                      placeholder="User"
-                      onChange={event => this.onFieldChange(event)}
-                    />
-                    <div className="helper_message"><h5>This username have already taken, please try another!</h5></div>
-                  </div>
-
-                  <button className="ui primary labeled icon button" onClick={(event) => this.requestUpdate(event)}>
-                    <i className="refresh alternate icon" />
-                    Update
-                  </button>
-                </div>
-              </div>
-            </div>
-    </Tab.Pane>
-        )}
-      },
-      {
-        menuItem: "Change First Name",
-        render: () => {
-          return (
-          <Tab.Pane>
-            <h3>Change First Name</h3>
-            <div className="ui fluid card">
-              <div className="content">
-                <div className="ui form">
-                  <div className="field">
-                    <label>First Name</label>
-                    <input
-                      type="text"
-                      name="firstName"
-                      placeholder="First Name"
-                      onChange={event => this.onFieldChange(event)}
-                    />
-                    <div className="helper_message"><h5>Something went wrong, please try again!</h5></div>
-                  </div>
-
-                  <button className="ui primary labeled icon button" onClick={(event) => this.requestUpdate(event)}>
-                    <i className="refresh alternate icon" />
-                    Update
-                  </button>
-                </div>
-              </div>
-            </div>
-    </Tab.Pane>
-        )}
-      },
-      {
-        menuItem: "Change Last Name",
-        render: () => {
-          return (
-          <Tab.Pane>
-            <h3>Change Last Name</h3>
-            <div className="ui fluid card">
-              <div className="content">
-                <div className="ui form">
-                  <div className="field">
-                    <label>Last Name</label>
-                    <input
-                      type="text"
-                      name="lastName"
-                      placeholder="Last Name"
-                      onChange={event => this.onFieldChange(event)}
-                    />
-                    <div className="helper_message"><h5>Something went wrong, Please try again!</h5></div>
-                  </div>
-                  <button className="ui primary labeled icon button" onClick={(event) => this.requestUpdate(event)}>
-                    <i className="refresh alternate icon" />
-                    Update
-                  </button>
-                </div>
-              </div>
-            </div>
-    </Tab.Pane>
-        )}
-      },
-      {
-        menuItem: "Change Password",
-        render: () => {
-          return (
-          <Tab.Pane>
-            <h3>Change Password</h3>
-            <div className="ui fluid card">
-              <div className="content">
-                <div className="ui form">
-                  <div className="field">
-                    <label>Password</label>
-                    <input
-                      type="password"
-                      name="password"
-                      placeholder="password"
-                      onChange={event => this.onFieldChange(event)}
-                    />
-                  </div>
-                  <div className="helper_message"><h5>This password is incorrect, please try another!</h5></div>
-                  <button className="ui primary labeled icon button" onClick={(event) => this.requestUpdate(event)}>
-                    <i className="refresh alternate icon" />
-                    Update
-                  </button>
-                </div>
-              </div>
-            </div>
-    </Tab.Pane>
-        )}
-      }
-    ];
-
-
     return (
       <div style={{ paddingTop: "60px" }}>
-        <Tab
-          menu={{ fluid: true, vertical: true }}
-          menuPosition="left"
-          panes={panes}
-        />
+        <div className="container">
+          <div className="row">
+            <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
+              <div className="card card-signin my-5">
+                <div className="card-body">
+                  <h5 className="card-title text-center">Edit Profile</h5>
+                  <form className="form-signin" onSubmit={event => this.requestUpdate(event)}>
+                    <div className="form-label-group">
+                      <input type="text" id="username"
+                        className="form-control"
+                        placeholder="Username"
+                        required autoFocus name='username'
+                        onChange={event => this.onFieldChange(event)}
+                      />
+                      <label htmlFor="username">Username</label>
+                    </div>
+
+                    <div className="form-label-group">
+                      <input type="password" id="inputPassword"
+                        className="form-control"
+                        placeholder="Password"
+                        required name='password'
+                        onChange={event => this.onFieldChange(event)}
+                      />
+                      <label htmlFor="inputPassword">Password</label>
+                    </div>
+
+                    <div className="form-label-group">
+                      <input type="text" id="firstName"
+                        className="form-control"
+                        placeholder="First Name"
+                        required name='firstName'
+                        onChange={event => this.onFieldChange(event)}
+                      />
+                      <label htmlFor="firstName">First Name</label>
+                    </div>
+
+                    <div className="form-label-group">
+                      <input type="text" id="lastName"
+                        className="form-control"
+                        placeholder="Last Name"
+                        required name='lastName'
+                        onChange={event => this.onFieldChange(event)}
+                      />
+                      <label htmlFor="lastName">Last Name</label>
+                    </div>
+
+                    <button className="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Update Info</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
