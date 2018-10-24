@@ -1,10 +1,11 @@
 import React from "react";
+import { withRouter } from 'react-router-dom';
 import axiosInst from "../_helpers/axios-helper";
 
 import {USER_UPDATE} from '../_helpers/api';
 
 
-export default class Settings extends React.Component {
+class Settings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -134,3 +135,4 @@ export default class Settings extends React.Component {
     );
   }
 }
+export default withRouter(Settings);

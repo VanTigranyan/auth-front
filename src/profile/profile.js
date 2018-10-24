@@ -31,9 +31,13 @@ class Profile extends React.Component {
     this.props.onRequestUser();
   }
 
+  shouldComponentUpdate() {
+    return true
+  }
+
   logOut = () => {
     localStorage.removeItem("auth-token");
-    this.props.history.push("/");
+    this.props.history.push("/login");
   };
 
   render() {
@@ -62,7 +66,7 @@ class Profile extends React.Component {
               />
               <Route
                 path="/settings/:id"
-                render={props => <Settings user={this.props.user} {...props} />}
+                render={props => <Settings user={this.props.user} reqUser={this.props.onRequestUser} {...props} />}
               />
               <Route
                 path="/profile"

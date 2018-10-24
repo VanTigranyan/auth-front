@@ -6,25 +6,12 @@ import {
   Switch,
   Redirect
 } from "react-router-dom";
+import {LastLocationProvider} from 'react-router-last-location';
 import Profile from "./profile/profile";
 import Register from "./register/register";
 import Login from "./login/login";
 
 class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      route: "login",
-      user: "",
-      isLoggedIn: false
-    };
-  }
-
-  getUser = u => {
-    this.setState({
-      user: { ...u }
-    });
-  };
 
   render() {
     return (
@@ -34,11 +21,11 @@ class App extends Component {
             <Redirect exact from="/" to="/login" />
             <Route
               path="/login"
-              render={props => <Login {...props} user={this.getUser} />}
+              render={props => <Login {...props}  />}
             />
             <Route
               path="/profile"
-              render={props => <Profile {...props} user={this.state.user} />}
+              render={props => <Profile {...props} />}
             />
             <Route
               path="/register"

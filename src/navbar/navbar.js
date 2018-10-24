@@ -23,9 +23,15 @@ class NavBar extends React.Component {
 
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav ml-auto">
-              <li className="nav-item">
-                <h4 onClick={this.props.history.goBack()}> &larr; Go Back</h4>
-              </li>
+
+              {
+                this.props.history.location.pathname === '/profile' ?
+                null :
+                (<li className="nav-item">
+                  <a className='nav-link' style={{cursor: 'pointer'}} onClick={() => this.props.history.goBack()}> &larr; Go Back</a>
+                </li>)
+              }
+
               <li className="nav-item">
                 <Link className="nav-link" to={"/posts"}>
                   Posts

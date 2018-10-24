@@ -47,6 +47,7 @@ export default class Posts extends React.Component {
       })
         .then(() => {
           this.onPostsLoad();
+          document.getElementById('createPost').reset();
         })
         .catch(err => console.log(err));
     } else {
@@ -265,6 +266,7 @@ export default class Posts extends React.Component {
               </div>
               <div className="modal-body">
                 <form
+                  id='createPost'
                   className="form-signin"
                 >
                   <div className="form-label-group">
